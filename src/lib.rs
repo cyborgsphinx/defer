@@ -19,6 +19,9 @@ impl<F: FnMut()> Drop for Defer<F> {
 #[macro_export]
 macro_rules! defer {
     ($($s:stmt);*) => {
-        $crate::Defer::new(||{ $($s)* })
+        ::gensym::gensym!{ $crate::defer!($($s);*) }
+    };
+    ($id:ident, $($s:stmt);*) => {
+        let $id = $crate::Defer::new(||{ $($s)* });
     };
 }
